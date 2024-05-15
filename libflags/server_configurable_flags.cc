@@ -18,7 +18,7 @@
 #include "server_configurable_flags/get_flags.h"
 #include "server_configurable_flags/get_cflags.h"
 
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) || defined(_MSC_VER)
 #include <cutils/properties.h>
 #endif  // __BIONIC__
 #include <cctype>
@@ -62,7 +62,7 @@ static bool ValidateExperimentSegment(const std::string& segment) {
          *segment.rbegin() != '.';
 }
 
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) || defined(_MSC_VER)
 static void ResetFlag(const char* key, const char* value, void* cookie) {
   if (strcmp(ATTEMPTED_BOOT_COUNT_PROPERTY, key) &&
       android::base::StartsWith(key, SYSTEM_PROPERTY_PREFIX) && strlen(value) > 0 &&
@@ -81,7 +81,8 @@ static void ResetFlag(const char* key, const char* value, void* cookie) {
 static void ResetAllFlags() {
   std::string reset_flags;
   property_list(ResetFlag, &reset_flags);
-
+#ifdef _MSC_VER
+#else
   if (reset_flags.length() > 0) {
     android::base::unique_fd fd(
         TEMP_FAILURE_RETRY(open(RESET_FLAGS_FILE_PATH, O_RDWR | O_CREAT | O_TRUNC, 0666)));
@@ -93,12 +94,13 @@ static void ResetAllFlags() {
       LOG(INFO) << __FUNCTION__ << " successfully write to file " << RESET_FLAGS_FILE_PATH;
     }
   }
+#endif
 }
 #endif  // __BIONIC__
 
 void ServerConfigurableFlagsReset(ResetMode reset_mode) {
   LOG(INFO) << __FUNCTION__ << " reset_mode value: " << reset_mode;
-#if defined(__BIONIC__)
+#if defined(__BIONIC__) || defined(_MSC_VER)
   if (reset_mode == BOOT_FAILURE) {
     int fail_count = android::base::GetIntProperty(ATTEMPTED_BOOT_COUNT_PROPERTY, 0);
     if (fail_count < ATTEMPTED_BOOT_COUNT_THRESHOLD) {

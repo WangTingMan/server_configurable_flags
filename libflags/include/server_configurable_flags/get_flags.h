@@ -18,6 +18,8 @@
 
 #include <string>
 
+#include <server_configurable_flags/server_configurable_flags_export.h>
+
 namespace server_configurable_flags {
 
 // Use the category name and flag name registered in SettingsToPropertiesMapper.java
@@ -25,7 +27,7 @@ namespace server_configurable_flags {
 // querying fails.
 // Note that for flags from Settings.Global, experiment_category_name should
 // always be global_settings.
-std::string GetServerConfigurableFlag(const std::string& experiment_category_name,
+SERVERCONFIGURABLEFLAGS_API std::string GetServerConfigurableFlag(const std::string& experiment_category_name,
                                       const std::string& experiment_flag_name,
                                       const std::string& default_value);
 

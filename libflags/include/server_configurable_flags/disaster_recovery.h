@@ -16,12 +16,14 @@
 
 #pragma once
 
+#include <server_configurable_flags/server_configurable_flags_export.h>
+
 namespace server_configurable_flags {
 
 enum ResetMode { BOOT_FAILURE, UPDATABLE_CRASHING };
 
 // Check failed reboot count, if it exceeds the threshold, server configurable
 // flags will be reset.
-void ServerConfigurableFlagsReset(ResetMode reset_mode);
+SERVERCONFIGURABLEFLAGS_API void ServerConfigurableFlagsReset(ResetMode reset_mode);
 
 }  // namespace server_configurable_flags

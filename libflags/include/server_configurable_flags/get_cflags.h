@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <server_configurable_flags/server_configurable_flags_export.h>
+
 // Use the category name and flag name registered in SettingsToPropertiesMapper.java
 // to query the experiment flag value. This method will return default_value if
 // querying fails.
@@ -28,7 +30,7 @@
 extern "C" {
 #endif
 
-const char* server_configurable_flags_GetServerConfigurableFlag(
+SERVERCONFIGURABLEFLAGS_API const char* server_configurable_flags_GetServerConfigurableFlag(
     const char* experiment_category_name,
     const char* experiment_flag_name,
     const char* default_value);
